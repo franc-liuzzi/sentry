@@ -43,9 +43,6 @@ services:
       SENTRY_EMAIL_USER: $SENTRY_EMAIL_USER
       SENTRY_EMAIL_PASSWORD: $SENTRY_EMAIL_PASSWORD
       SENTRY_SINGLE_ORGANIZATION: $SENTRY_SINGLE_ORGANIZATION
-    networks:
-      - default
-      - internal
 
   cron:
     image: sentry
