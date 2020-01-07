@@ -1,57 +1,89 @@
 version: '2'
 
 volumes:
-   sentry-pgdb:
+   sentry_pgdb:
 
 services:
   redis:
+    restart: always
     image: redis
 
   postgres:
     image: postgres
+    restart: always
     environment:
       POSTGRES_USER: sentry
       POSTGRES_PASSWORD: sentry
       POSTGRES_DB: sentry
     volumes:
-     - sentry-pgdb:/var/lib/postgresql/data
+      - sentry_pgdb:/var/lib/postgresql/data
+  
+  sentry_upgrade:
+    image: docker:dind
+    depends_on: 
+      - sentry
+    cmd: docker exec ${COMPOSE_PROJECT_NAME}_sentry_1 sentry upgrade
 
   sentry:
     image: sentry
     links:
-     - redis
-     - postgres
-    ports:
-     - 9000:9000
+      - redis
+      - postgres
+    depends_on: 
+      - redis
+      - postgres
+    restart: always
     environment:
       SENTRY_SECRET_KEY: $SENTRY_SECRET_KEY
       SENTRY_POSTGRES_HOST: postgres
       SENTRY_DB_USER: sentry
       SENTRY_DB_PASSWORD: sentry
       SENTRY_REDIS_HOST: redis
+      SENTRY_EMAIL_HOST: $SENTRY_EMAIL_HOST
+      SENTRY_EMAIL_USER: $SENTRY_EMAIL_USER
+      SENTRY_EMAIL_PASSWORD: $SENTRY_EMAIL_PASSWORD
+      SENTRY_SINGLE_ORGANIZATION: $SENTRY_SINGLE_ORGANIZATION
+    networks:
+      - default
+      - internal
 
   cron:
     image: sentry
     links:
-     - redis
-     - postgres
+      - redis
+      - postgres
+    depends_on: 
+      - redis
+      - postgres
     command: "sentry run cron"
+    restart: always
     environment:
       SENTRY_SECRET_KEY: $SENTRY_SECRET_KEY
       SENTRY_POSTGRES_HOST: postgres
       SENTRY_DB_USER: sentry
       SENTRY_DB_PASSWORD: sentry
       SENTRY_REDIS_HOST: redis
+      SENTRY_EMAIL_HOST: $SENTRY_EMAIL_HOST
+      SENTRY_EMAIL_USER: $SENTRY_EMAIL_USER
+      SENTRY_EMAIL_PASSWORD: $SENTRY_EMAIL_PASSWORD
+      SENTRY_SINGLE_ORGANIZATION: $SENTRY_SINGLE_ORGANIZATION
 
   worker:
     image: sentry
     links:
-     - redis
-     - postgres
+      - redis
+      - postgres
     command: "sentry run worker"
+    restart: always
     environment:
       SENTRY_SECRET_KEY: $SENTRY_SECRET_KEY
       SENTRY_POSTGRES_HOST: postgres
       SENTRY_DB_USER: sentry
       SENTRY_DB_PASSWORD: sentry
       SENTRY_REDIS_HOST: redis
+      SENTRY_EMAIL_HOST: $SENTRY_EMAIL_HOST
+      SENTRY_EMAIL_USER: $SENTRY_EMAIL_USER
+      SENTRY_EMAIL_PASSWORD: $SENTRY_EMAIL_PASSWORD
+      SENTRY_SINGLE_ORGANIZATION: $SENTRY_SINGLE_ORGANIZATION
+
+  
