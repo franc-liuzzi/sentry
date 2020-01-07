@@ -22,7 +22,7 @@ services:
     image: docker:dind
     depends_on: 
       - sentry
-    cmd: docker exec ${COMPOSE_PROJECT_NAME}_sentry_1 sentry upgrade
+    command: docker exec ${COMPOSE_PROJECT_NAME}_sentry_1 sentry upgrade
 
   sentry:
     image: sentry
