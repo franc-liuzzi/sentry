@@ -38,25 +38,25 @@ services:
       SENTRY_EMAIL_PASSWORD: $SENTRY_EMAIL_PASSWORD
       SENTRY_SINGLE_ORGANIZATION: $SENTRY_SINGLE_ORGANIZATION
     
-    upgrade:
-      image: sentry
-      links:
-        - redis
-        - postgres
-      depends_on: 
-        - redis
-        - postgres
-      command: "sentry upgrade"
-      environment:
-        SENTRY_SECRET_KEY: $SENTRY_SECRET_KEY
-        SENTRY_POSTGRES_HOST: postgres
-        SENTRY_DB_USER: sentry
-        SENTRY_DB_PASSWORD: sentry
-        SENTRY_REDIS_HOST: redis
-        SENTRY_EMAIL_HOST: $SENTRY_EMAIL_HOST
-        SENTRY_EMAIL_USER: $SENTRY_EMAIL_USER
-        SENTRY_EMAIL_PASSWORD: $SENTRY_EMAIL_PASSWORD
-        SENTRY_SINGLE_ORGANIZATION: $SENTRY_SINGLE_ORGANIZATION
+  upgrade:
+    image: sentry
+    links:
+      - redis
+      - postgres
+    depends_on: 
+      - redis
+      - postgres
+    command: "sentry upgrade"
+    environment:
+      SENTRY_SECRET_KEY: $SENTRY_SECRET_KEY
+      SENTRY_POSTGRES_HOST: postgres
+      SENTRY_DB_USER: sentry
+      SENTRY_DB_PASSWORD: sentry
+      SENTRY_REDIS_HOST: redis
+      SENTRY_EMAIL_HOST: $SENTRY_EMAIL_HOST
+      SENTRY_EMAIL_USER: $SENTRY_EMAIL_USER
+      SENTRY_EMAIL_PASSWORD: $SENTRY_EMAIL_PASSWORD
+      SENTRY_SINGLE_ORGANIZATION: $SENTRY_SINGLE_ORGANIZATION
 
   cron:
     image: sentry
