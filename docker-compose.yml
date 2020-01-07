@@ -1,7 +1,7 @@
 version: '2'
 
-volumes:
-   sentry_pgdb:
+# volumes:
+#    sentry_pgdb:
 
 services:
   redis:
