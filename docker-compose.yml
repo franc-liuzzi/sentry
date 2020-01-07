@@ -23,6 +23,8 @@ services:
     depends_on: 
       - sentry
     command: docker exec ${COMPOSE_PROJECT_NAME}_sentry_1 sentry upgrade
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
   sentry:
     image: sentry
